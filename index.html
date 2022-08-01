@@ -8,15 +8,14 @@
   <title>Rock Paper Scissors</title>
 </head>
 <body>
-  <form id="playerChoice" onsubmit="return false">
-    <input type="radio" id="rock" name="gameChoice" value="rock">
-    <label for="rock">Rock</label>
-    <input type="radio" id="paper" name="gameChoice" value="paper">
-    <label for="paper">Paper</label>
-    <input type="radio" id="scissors" name="gameChoice" value="scissors">
-    <label for="scissors">Scissors</label>
-    <input type="submit" value="Submit">
-    <script src="./game.js" type="module"></script>
-  </form>
+  <button class="playerChoice" id="rock">Rock</button>
+  <button class="playerChoice" id="paper">Paper</button>
+  <button class="playerChoice" id="scissors">Scissors</button>
+  <div id="scoreboard">
+    <div id="winner"></div>
+    <div id="round"></div>
+    <div id="score"></div>
+  </div>
 </body>
+<script src="./game.js"></script>
 </html>

@@ -13,43 +13,71 @@ function getComputerChoice() {
   }
 }
 
-function determineWinner(playerChoice, computerChoice) {
-  let winner = ""
-
+function determineRoundWinner(playerChoice, computerChoice) {
   if (!playerChoice)
     return "Error: no player choice"
 
   if(playerChoice === computerChoice)
-    winner = "draw"
+    return "draw"
   else if(playerChoice === "rock" && computerChoice === "scissors")
-    winner = "player"
+    return "player"
   else if(playerChoice === "scissors" && computerChoice === "paper")
-    winner = "player"
+    return "player"
   else if(playerChoice === "paper" && computerChoice === "rock")
-    winner = "player"
+    return "player"
   else
-    winner = "computer"
-
-  return winner
+    return "computer"
 }
 
-function getPlayerChoice() {
-  console.log("Get player choice placeholder")
+function declareWinner(winner) {
+  const gameWinner = document.createElement("div")
+  gameWinner.style.fontSize = "24px";
+  gameWinner.style.fontWeight = "900";
+  gameWinner.textContent = `${winner} has won the game!`
+  return gameWinner
 }
 
-function playRound() {
-  let computerChoice = getComputerChoice();
-  let ele = document.getElementsByName("gameChoice")
-  let playerChoice = ""
-  let winner = ""
+function updateScoreboard(winner, choices) {
+  const scoreboard = document.querySelector("#scoreboard");
+  const winnerDiv = document.querySelector("#winner");
+  scoreboard.removeChild(winnerDiv);
+  const round = document.querySelector("#round");
+  scoreboard.removeChild(round);
+  const score = document.querySelector("#score");
+  scoreboard.removeChild(score);
 
-  for (let i = 0; i < ele.length; i++) {
-    if(ele[i].checked)
-      playerChoice = ele[i].value;
+  if (wins === 5) {
+    gameWinner = declareWinner("Player")
+    scoreboard.appendChild(gameWinner)
+  } else if (losses === 5) {
+    gameWinner = declareWinner("Computer")
+    scoreboard.appendChild(gameWinner)
   }
 
-  winner = determineWinner(playerChoice, computerChoice)
+  winnerDiv.style.fontSize = "18px";
+  winnerDiv.style.fontWeight = "900";
+  winnerDiv.textContent = `The winner is: ${winner}`;
+  scoreboard.appendChild(winnerDiv);
 
+  round.textContent = `Player: ${choices[0]}, Computer: ${choices[1]}`
+  scoreboard.append(round)
+  
+  score.textContent = `Wins: ${wins}, Losses: ${losses}, Draws: ${draws}`;
+  scoreboard.append(score);
+  
+  if (wins >= 5 || losses >= 5) {
+    wins = 0
+    losses = 0
+    draws = 0
+  }
+}
+
+function playRound(e) {
+  const computerChoice = getComputerChoice();
+  const playerChoice = e.target.id;
+  let winner = "";
+
+  winner = determineRoundWinner(playerChoice, computerChoice);
 
   if(winner === "player")
     wins++
@@ -58,10 +86,8 @@ function playRound() {
   else if (winner === "draw")
     draws++
 
-  console.log("Winner: " + winner)
-  console.log("Player: " + playerChoice + " Computer: " + computerChoice)
-  console.log("Total wins: " + wins + " Losses: " + losses + " Draws: " + draws)
+  updateScoreboard(winner, [playerChoice, computerChoice])
 }
 
-let formElem = document.getElementById("playerChoice")
-formElem.addEventListener("submit", playRound);
+const buttons = document.querySelectorAll(".playerChoice")
+buttons.forEach (button => button.addEventListener("click", playRound))
